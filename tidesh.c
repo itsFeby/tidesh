@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
@@ -16,6 +17,7 @@ int tidesh_cd(char **args);
 int tidesh_help(char **args);
 int tidesh_exit(char **args);
 int tidesh_launch(char **args);
+int tidesh_pwd(char **args);
 
 // Signal handler
 void handle_sigint(int sig) {
@@ -88,8 +90,8 @@ char **tidesh_split_line(char *line) {
 }
 
 // Built-in command list
-char *builtin_str[] = { "cd", "help", "exit" };
-int (*builtin_func[]) (char **) = { &tidesh_cd, &tidesh_help, &tidesh_exit };
+char *builtin_str[] = { "cd", "help", "exit", "pwd" };
+int (*builtin_func[]) (char **) = { &tidesh_cd, &tidesh_help, &tidesh_exit, &tidesh_pwd };
 
 int tidesh_num_builtins() {
   return sizeof(builtin_str) / sizeof(char *);
@@ -146,6 +148,16 @@ int tidesh_help(char **args) {
   printf("tidesh - a very soggy shell.\nBuilt-in commands:\n");
   for (int i = 0; i < tidesh_num_builtins(); i++) {
     printf("  %s\n", builtin_str[i]);
+  }
+  return 1;
+}
+
+int tidesh_pwd(char **args) {
+  char cwd[PATH_MAX];
+  if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    printf("%s\n", cwd);
+  } else {
+    perror("tidesh");
   }
   return 1;
 }
