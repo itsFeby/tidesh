@@ -18,6 +18,7 @@ int tidesh_help(char **args);
 int tidesh_exit(char **args);
 int tidesh_launch(char **args);
 int tidesh_pwd(char **args);
+int tidesh_clear(char **args);
 
 // Signal handler
 void handle_sigint(int sig) {
@@ -90,8 +91,8 @@ char **tidesh_split_line(char *line) {
 }
 
 // Built-in command list
-char *builtin_str[] = { "cd", "help", "exit", "pwd" };
-int (*builtin_func[]) (char **) = { &tidesh_cd, &tidesh_help, &tidesh_exit, &tidesh_pwd };
+char *builtin_str[] = { "cd", "help", "exit", "pwd", "clear" };
+int (*builtin_func[]) (char **) = { &tidesh_cd, &tidesh_help, &tidesh_exit, &tidesh_pwd, &tidesh_clear };
 
 int tidesh_num_builtins() {
   return sizeof(builtin_str) / sizeof(char *);
@@ -159,6 +160,11 @@ int tidesh_pwd(char **args) {
   } else {
     perror("tidesh");
   }
+  return 1;
+}
+
+int tidesh_clear(char **args) {
+  printf("\033[H\033[J");  // ANSI escape sequence to clear screen
   return 1;
 }
 
