@@ -11,6 +11,8 @@
   - `cd`
   - `help`
   - `exit`
+  - `pwd`
+  - `clear`
 - Executes external programs using `execvp`
 - Handles `Ctrl+C` gracefully (no shell crash)
 - Prompt shows current working directory
